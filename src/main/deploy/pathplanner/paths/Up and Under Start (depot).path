@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.641388888888889,
+        "y": 5.950669191919192
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1969939989194955,
+        "y": 5.9507438778085175
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.5408838383838386,
+        "y": 5.917449494949494
+      },
+      "prevControl": {
+        "x": 2.0345948818657655,
+        "y": 5.909530921694753
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Up and Under Depot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.76896988310452
+  },
+  "reversed": false,
+  "folder": "Blue Up and Under (depot)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 179.76896988310452
+  },
+  "useDefaultConstraints": true
+}

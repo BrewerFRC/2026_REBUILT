@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5374747474747479,
+        "y": 5.540959595959595
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0666922524662317,
+        "y": 5.9341122275179226
+      },
+      "isLocked": false,
+      "linkedName": "Up and Under Shoot (Human Player)"
+    },
+    {
+      "anchor": {
+        "x": 4.02895202020202,
+        "y": 7.445555555555555
+      },
+      "prevControl": {
+        "x": 3.706594553540027,
+        "y": 7.375528122942486
+      },
+      "nextControl": {
+        "x": 4.404397577637503,
+        "y": 7.5271155974104484
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.38620512820513,
+        "y": 7.445555555555555
+      },
+      "prevControl": {
+        "x": 5.1372649170614215,
+        "y": 7.47305108772484
+      },
+      "nextControl": {
+        "x": 5.693130322592829,
+        "y": 7.411655561990517
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.694191919191919,
+        "y": 6.5929166666666665
+      },
+      "prevControl": {
+        "x": 7.067772094027331,
+        "y": 6.7750866118609965
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Up and Under Trench (Human Player)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.25129566720895
+  },
+  "reversed": false,
+  "folder": "Blue Up and Under (Human Player)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 150.0
+  },
+  "useDefaultConstraints": true
+}

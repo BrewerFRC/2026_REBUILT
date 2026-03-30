@@ -1,0 +1,128 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.6244483985765115,
+        "y": 6.55803084223013
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.602930011862398,
+        "y": 5.535907473309607
+      },
+      "isLocked": false,
+      "linkedName": "Blue Depot Trech to Trench"
+    },
+    {
+      "anchor": {
+        "x": 7.6244483985765115,
+        "y": 4.8258007117437725
+      },
+      "prevControl": {
+        "x": 7.618820512820513,
+        "y": 5.453641025641025
+      },
+      "nextControl": {
+        "x": 7.6279256013359165,
+        "y": 4.437888062731265
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.014128205128206,
+        "y": 7.349038461538462
+      },
+      "prevControl": {
+        "x": 6.647222027958892,
+        "y": 7.278694703446164
+      },
+      "nextControl": {
+        "x": 5.490858974358975,
+        "y": 7.407179487179487
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.6303205128205143,
+        "y": 7.349038461538462
+      },
+      "prevControl": {
+        "x": 3.5695971373615913,
+        "y": 7.341339472812716
+      },
+      "nextControl": {
+        "x": 1.2116794871794885,
+        "y": 7.360666666666666
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.3422894424673792,
+        "y": 4.942
+      },
+      "prevControl": {
+        "x": 3.304756410256411,
+        "y": 5.232705128205127
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Depot Trech Shoot 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0736842105262903,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.9789473684210719,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.7508771929824833,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeOn",
+      "waypointRelativePos": 0.10631229235880399,
+      "endWaypointRelativePos": 1.1960132890365134,
+      "command": null
+    },
+    {
+      "name": "ShooterRev",
+      "waypointRelativePos": 2.5603543743078676,
+      "endWaypointRelativePos": 4.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 146.493
+  },
+  "reversed": false,
+  "folder": "Blue Depot Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

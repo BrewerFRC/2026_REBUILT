@@ -1,0 +1,126 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.200884265279583,
+        "y": 0.4317685305591681
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.047150612314237,
+        "y": 0.5214417492355703
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.647,
+        "y": 1.023
+      },
+      "prevControl": {
+        "x": 7.5657385589117165,
+        "y": 0.7212454685674985
+      },
+      "nextControl": {
+        "x": 7.79227513874088,
+        "y": 1.5624616540447538
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.700217948717951,
+        "y": 3.442
+      },
+      "prevControl": {
+        "x": 7.746730769230771,
+        "y": 3.139666666666667
+      },
+      "nextControl": {
+        "x": 7.6622036526544655,
+        "y": 3.689092924412655
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.223,
+        "y": 0.558
+      },
+      "prevControl": {
+        "x": 6.471374107729976,
+        "y": 0.6456742297809583
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HumanPlayer Trench to Intake"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.33684210526316327,
+      "rotationDegrees": 8.8626887528007
+    },
+    {
+      "waypointRelativePos": 1.0368421052631502,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 2.000000000000003,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7906976744186051,
+      "maxWaypointRelativePos": 2.1129568106312213,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "DeployArm",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.45182724252492196,
+      "command": null
+    },
+    {
+      "name": "IntakeOn",
+      "waypointRelativePos": 0.4451827242524975,
+      "endWaypointRelativePos": 2.485049833887083,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Blue Human Player Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.679,
+        "y": 5.342
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.201673590159572,
+        "y": 5.297480497174959
+      },
+      "isLocked": false,
+      "linkedName": "BlueDepotIntakeEnd"
+    },
+    {
+      "anchor": {
+        "x": 2.679,
+        "y": 5.342
+      },
+      "prevControl": {
+        "x": 1.9929358974358977,
+        "y": 5.690846153846154
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BlueDepotShoot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ShooterRev",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 152.43
+  },
+  "reversed": false,
+  "folder": "Blue Depot Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 146.365
+  },
+  "useDefaultConstraints": true
+}

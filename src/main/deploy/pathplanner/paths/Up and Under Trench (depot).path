@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.01890865954923,
+        "y": 0.668737373737373
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5363567648337995,
+        "y": 0.6434501521322764
+      },
+      "isLocked": false,
+      "linkedName": "Up and Under Shoot 1"
+    },
+    {
+      "anchor": {
+        "x": 3.098800505050505,
+        "y": 0.668737373737373
+      },
+      "prevControl": {
+        "x": 2.848999277323231,
+        "y": 0.6587700959772949
+      },
+      "nextControl": {
+        "x": 3.440495428113443,
+        "y": 0.6823712867423768
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.502487179487181,
+        "y": 0.5930512820512819
+      },
+      "prevControl": {
+        "x": 4.9515397849909215,
+        "y": 0.5207218268262831
+      },
+      "nextControl": {
+        "x": 5.875799207985168,
+        "y": 0.6420604178053161
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.660972222222222,
+        "y": 1.3552777777777771
+      },
+      "prevControl": {
+        "x": 7.413459092261531,
+        "y": 1.3201032060382094
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Up and Under Trench Pickup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Blue Up and Under (depot)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -127.589
+  },
+  "useDefaultConstraints": true
+}

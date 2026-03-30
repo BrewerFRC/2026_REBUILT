@@ -1,0 +1,102 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.646511334307531,
+        "y": 5.003510204532854
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.577261285376786,
+        "y": 5.541977440799118
+      },
+      "isLocked": false,
+      "linkedName": "Trench Full Belly 2"
+    },
+    {
+      "anchor": {
+        "x": 5.828076923076924,
+        "y": 7.383923076923077
+      },
+      "prevControl": {
+        "x": 6.370953509461697,
+        "y": 7.398595417095639
+      },
+      "nextControl": {
+        "x": 4.967589743589745,
+        "y": 7.360666666666666
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.130333333333334,
+        "y": 7.2676410256410255
+      },
+      "prevControl": {
+        "x": 3.8163974358974375,
+        "y": 7.290897435897436
+      },
+      "nextControl": {
+        "x": 2.880476846548375,
+        "y": 7.259171314224586
+      },
+      "isLocked": false,
+      "linkedName": "Blue Trench Trench Drive 4"
+    },
+    {
+      "anchor": {
+        "x": 3.2931282051282067,
+        "y": 5.2675897435897445
+      },
+      "prevControl": {
+        "x": 3.0605641025641033,
+        "y": 5.779230769230769
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.073684210526315,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeOn",
+      "waypointRelativePos": 1.428571428571429,
+      "endWaypointRelativePos": 3.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 137.102
+  },
+  "reversed": false,
+  "folder": "Blue Depot Trench Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}
