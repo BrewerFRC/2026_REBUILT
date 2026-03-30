@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.5408838383838386,
+        "y": 5.917449494949494
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.59625,
+        "y": 5.0205176767676765
+      },
+      "isLocked": false,
+      "linkedName": "Up and Under Depot"
+    },
+    {
+      "anchor": {
+        "x": 0.5408838383838386,
+        "y": 0.6133712121212114
+      },
+      "prevControl": {
+        "x": 0.6073232323232325,
+        "y": 1.676401515151515
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Up and Under Human Player"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.5558555670132
+  },
+  "reversed": false,
+  "folder": "Blue Up and Under (depot)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 179.76896988310452
+  },
+  "useDefaultConstraints": true
+}

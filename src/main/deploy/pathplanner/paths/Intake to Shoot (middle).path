@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.223,
+        "y": 0.558
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.948869065519594,
+        "y": 0.558
+      },
+      "isLocked": false,
+      "linkedName": "HumanPlayer Trench to Intake"
+    },
+    {
+      "anchor": {
+        "x": 3.5373205128205143,
+        "y": 0.558166666666666
+      },
+      "prevControl": {
+        "x": 3.787168542254986,
+        "y": 0.5494510377329053
+      },
+      "nextControl": {
+        "x": 2.5372948717948725,
+        "y": 0.593051282051282
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.697,
+        "y": 2.65124358974359
+      },
+      "prevControl": {
+        "x": 2.6768333333333345,
+        "y": 2.279141025641026
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HumanPlayer Intake to Shoot Middle"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.003508771929818,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -144.344
+  },
+  "reversed": false,
+  "folder": "Blue Human Player Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

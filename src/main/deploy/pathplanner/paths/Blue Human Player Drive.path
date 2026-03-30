@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.700115384615386,
+        "y": 0.558166666666666
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.2466553163601644,
+        "y": 0.5532311170735498
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.3558316683633638,
+        "y": 0.558166666666666
+      },
+      "prevControl": {
+        "x": 1.2857801691834418,
+        "y": 0.5752770390265678
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Human Player"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "DeployArm",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.6600221483942417,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.3079825493499
+  },
+  "reversed": false,
+  "folder": "Blue Human Player",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -179.71764239629735
+  },
+  "useDefaultConstraints": true
+}

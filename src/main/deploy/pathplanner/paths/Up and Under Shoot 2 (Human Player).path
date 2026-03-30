@@ -1,0 +1,86 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.694191919191919,
+        "y": 4.909785353535353
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.7027940317780565,
+        "y": 4.526863962793059
+      },
+      "isLocked": false,
+      "linkedName": "Up and Under Intook (Human Player)"
+    },
+    {
+      "anchor": {
+        "x": 5.455974358974361,
+        "y": 7.4653205128205125
+      },
+      "prevControl": {
+        "x": 5.754951631701633,
+        "y": 7.487466977466977
+      },
+      "nextControl": {
+        "x": 5.206657420360184,
+        "y": 7.446852591441685
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.752121212121213,
+        "y": 7.334823232323232
+      },
+      "prevControl": {
+        "x": 3.9855577414467254,
+        "y": 7.424307235231344
+      },
+      "nextControl": {
+        "x": 3.087727272727273,
+        "y": 7.080138888888889
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.3756313131313136,
+        "y": 5.950669191919192
+      },
+      "prevControl": {
+        "x": 3.372533005213253,
+        "y": 6.20064999215802
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 125.00000000000001
+  },
+  "reversed": false,
+  "folder": "Blue Up and Under (Human Player)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.25129566720895
+  },
+  "useDefaultConstraints": true
+}

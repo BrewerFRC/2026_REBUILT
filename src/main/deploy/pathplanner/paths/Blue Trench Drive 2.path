@@ -1,0 +1,108 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.646511334307531,
+        "y": 4.558
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.612639536665945,
+        "y": 5.835581880368674
+      },
+      "isLocked": false,
+      "linkedName": "Trench Full Belly"
+    },
+    {
+      "anchor": {
+        "x": 6.583910256410259,
+        "y": 7.434
+      },
+      "prevControl": {
+        "x": 7.624628500269715,
+        "y": 7.426624294217076
+      },
+      "nextControl": {
+        "x": 6.105587196469806,
+        "y": 7.437389937843528
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.874538461538463,
+        "y": 7.434
+      },
+      "prevControl": {
+        "x": 4.805266918788186,
+        "y": 7.4232762058670785
+      },
+      "nextControl": {
+        "x": 2.9048168757083213,
+        "y": 7.445173070482257
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.697,
+        "y": 5.342
+      },
+      "prevControl": {
+        "x": 2.664373345803103,
+        "y": 5.589861859582946
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Trench Drive 2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.3,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.1101243339253912,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeOn",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.2558139534883492,
+      "command": null
+    },
+    {
+      "name": "ShooterRev",
+      "waypointRelativePos": 1.5149501661129487,
+      "endWaypointRelativePos": 3.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 145.93700000000004
+  },
+  "reversed": false,
+  "folder": "Blue Trench - Depot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -89.097
+  },
+  "useDefaultConstraints": true
+}

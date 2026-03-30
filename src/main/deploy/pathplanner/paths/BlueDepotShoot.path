@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.679,
+        "y": 5.342
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.075177040694826,
+        "y": 5.248396603271009
+      },
+      "isLocked": false,
+      "linkedName": "BlueDepotIntakeEnd"
+    },
+    {
+      "anchor": {
+        "x": 2.679,
+        "y": 5.342
+      },
+      "prevControl": {
+        "x": 2.4210128205128223,
+        "y": 5.476897435897436
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BlueDepotShoot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ShooterRev",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 152.43
+  },
+  "reversed": false,
+  "folder": "Blue Depot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 146.365
+  },
+  "useDefaultConstraints": true
+}
