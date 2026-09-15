@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OperatorConstants;
 
 
+/** Controls the feeder motor that pushes game pieces from the hopper into the shooter. */
 public class feedersubsystem extends SubsystemBase {
 
     private final TalonFX feederMotor;

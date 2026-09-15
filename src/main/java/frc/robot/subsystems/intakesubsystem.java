@@ -18,6 +18,7 @@ import frc.robot.Constants.OperatorConstants;
 
 //import edu.wpi.first.wpilibj.AnalogInput;
 
+/** Controls the ground intake motor used to pick up game pieces. */
 public class intakesubsystem extends SubsystemBase {
   
     private SparkMax intakeSubsystemMotor;

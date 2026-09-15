@@ -6,6 +6,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 
+/**
+ * Bundles the drivetrain, intake, feeder, shooter, hood, and hopper
+ * subsystems into higher-level composite commands (e.g. auto-aim-and-shoot)
+ * that need to coordinate more than one subsystem at a time.
+ */
 public final class commandcollection {
     private final CommandSwerveDrivetrain drive;
     private final intakesubsystem intake;
@@ -72,6 +77,10 @@ public final class commandcollection {
     }
         */
 
+        /**
+         * Turns the drivetrain to face the hub while revving the shooter, then
+         * once both are ready, feeds a game piece through hood/feeder/hopper.
+         */
         public Command AimAndShootCommand() {
                 final gethubAimDistanceCommand gethubdirection = new gethubAimDistanceCommand(drive, 0,0);
                 final ShooterRevCommand ShooterRevCommand = new ShooterRevCommand(shooter);
@@ -105,6 +114,7 @@ public final class commandcollection {
                 // );
         }
 
+        /** Raises the hood, then briefly after feeds a game piece through the hopper. */
         private Command hoodfeederhopper() {
                 final FeederOnCommand feederon = new FeederOnCommand(feeder);
                 // final FeederOffCommand feederoff = new FeederOffCommand(feeder);

@@ -6,8 +6,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import java.util.function.DoubleSupplier;
 
-import javax.lang.model.util.ElementScanner14;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 //import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -17,6 +15,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import static edu.wpi.first.units.Units.*;
 
+/**
+ * Default teleop driving command: field-centric swerve drive from joystick
+ * axes, with the inputs slew-rate-limited and zeroed out after a couple of
+ * scheduler cycles of no input (to avoid drifting from stale ramped values).
+ */
 public class teleopdriveCommand extends Command {
     private CommandSwerveDrivetrain drive;
     private DoubleSupplier getLeftY;
@@ -65,6 +68,8 @@ public class teleopdriveCommand extends Command {
         .withVelocityX(putLeftY * MaxSpeed)
         .withVelocityY(putLeftX * MaxSpeed)
         .withRotationalRate(putRightX * MaxAngularRate)); */
+        // Count consecutive scheduler cycles with zero stick input so the ramp
+        // below can snap straight to a full stop instead of slowly decaying.
         if (getLeftX.getAsDouble() == 0 && getLeftY.getAsDouble() == 0 && getRightX.getAsDouble() == 0) {
             inputtracker = inputtracker + 1;
         }
@@ -100,6 +105,7 @@ public class teleopdriveCommand extends Command {
 
     }
 
+    /** Moves currentValue toward targetValue by at most rampRate per call. */
     public static double ramp(double currentValue, double targetValue, double rampRate){
         if(currentValue < targetValue){
             currentValue = currentValue + rampRate;

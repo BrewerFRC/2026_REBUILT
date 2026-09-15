@@ -30,6 +30,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.hubpositioninfo;
 
 
+/**
+ * Controls the shooter flywheel motors, including hub-distance-based
+ * interpolation of target RPS so shot power scales with range.
+ */
 public class shootersubsystem extends SubsystemBase {
 
     private final TalonFX shooterMotorRight, shooterMotorLeft;

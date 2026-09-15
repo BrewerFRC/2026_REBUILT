@@ -24,6 +24,7 @@ import frc.robot.Constants.OperatorConstants;
 //import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.PWM;
 
+/** Controls the hopper motor that moves game pieces up toward the feeder. */
 public class hoppersubsystem extends SubsystemBase {
 
     //public TalonFX hoppersubsystemMotor;

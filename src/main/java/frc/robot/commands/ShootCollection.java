@@ -6,6 +6,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 
+/**
+ * Composes the shooter, hood, feeder, and hopper subsystems into the
+ * full "spin up then feed" shooting sequence used by driver controls
+ * and autonomous named commands.
+ */
 public final class ShootCollection {
     private final feedersubsystem feeder;
     private final shootersubsystem shooter;
@@ -27,6 +32,7 @@ public final class ShootCollection {
     }
 
 
+        /** Revs the shooter, then once it's at speed runs the hood/feeder/hopper. */
         public Command ShootCommand() {
                 final ShooterRevCommand ShooterRevCommand = new ShooterRevCommand(shooter);
                 // final FeederPassiveReverseCommand feederPassiveReverseCommand = new FeederPassiveReverseCommand(feeder);
@@ -42,6 +48,7 @@ public final class ShootCollection {
 
         }
 
+        /** Raises the hood, then briefly after feeds a game piece through the hopper. */
         private Command hoodfeederhopper() {
                 final FeederOnCommand feederon = new FeederOnCommand(feeder);
                 // final FeederOffCommand feederoff = new FeederOffCommand(feeder);

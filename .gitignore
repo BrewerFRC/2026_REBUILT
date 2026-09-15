@@ -1,0 +1,33 @@
+### WPILib/Gradle standard ignores ###
+
+# Gradle build output
+build/
+bin/
+
+# Do NOT ignore the Gradle wrapper jar/scripts - they must be committed so
+# teammates and CI can build without having Gradle preinstalled.
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE project files
+.idea/
+*.iml
+.vscode/.browse.VC.db*
+.classpath
+.project
+.settings/
+.metadata/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Simulation GUI state (machine-specific, regenerated automatically)
+*-sim-ds.json
+*-sim-elastic.json
+
+# Log/replay files produced by robot code, not source
+*.wpilog
+*.hoot
+*.rlog
+*.rlog.wpilog
+logs/
