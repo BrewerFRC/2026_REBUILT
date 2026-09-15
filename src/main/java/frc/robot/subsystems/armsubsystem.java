@@ -18,6 +18,7 @@ import frc.robot.Constants.OperatorConstants;
 //import edu.wpi.first.wpilibj.AnalogInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
 
+/** Controls the single TalonFX motor that raises and lowers the arm. */
 public class armsubsystem extends SubsystemBase {
   
   public TalonFX armsubsystemMotor;

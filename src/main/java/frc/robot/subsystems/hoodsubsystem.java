@@ -25,6 +25,10 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.hubpositioninfo;
 
+/**
+ * Controls the shooter hood angle, including a distance-based interpolation
+ * lookup so the hood auto-adjusts as the robot's range to the hub changes.
+ */
 public class hoodsubsystem extends SubsystemBase {
   
     public static Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();

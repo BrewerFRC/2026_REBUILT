@@ -14,6 +14,11 @@ import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import frc.robot.hubpositioninfo;
 
+/**
+ * Manual driving with the heading locked onto the hub: translation still
+ * comes from the joystick, but rotation is overridden to face the hub using
+ * {@link #gethubdirection()}.
+ */
 public class ManualAlignedMoveCommand extends Command {
 
   public double hub_xposition = 0;
@@ -97,12 +102,14 @@ public class ManualAlignedMoveCommand extends Command {
 
     }
 
+    /** True once the drivetrain's heading is within 3 degrees of the hub direction. */
     public boolean isrobotaligned() {
         Rotation2d targetHeading = aim2.TargetDirection;
         Rotation2d currentHeadingBlueAlliance = drive.getState().Pose.getRotation();
         Rotation2d currentHeading = currentHeadingBlueAlliance.rotateBy(drive.getOperatorForwardDirection());
         return (MathUtil.isNear(MathUtil.angleModulus(targetHeading.getRadians()), MathUtil.angleModulus(currentHeading.getRadians()),Degrees.of(3).in(Radians),-Math.PI,Math.PI));
     }
+    /** Field-relative heading from the robot's current pose to the hub. */
     private Rotation2d gethubdirection() {
         /* if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
             hub_xposition = hub_xposition_blue;
@@ -136,6 +143,7 @@ public class ManualAlignedMoveCommand extends Command {
         // return hubdirectionBlueAlliance.rotateBy(drive.getOperatorForwardDirection() + 180);
     }
 
+    /** Moves currentValue toward targetValue by at most rampRate per call. */
     public static double ramp(double currentValue, double targetValue, double rampRate){
         if(currentValue < targetValue){
             currentValue = currentValue + rampRate;
