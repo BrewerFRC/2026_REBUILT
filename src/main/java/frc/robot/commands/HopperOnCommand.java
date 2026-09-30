@@ -40,12 +40,15 @@ public class HopperOnCommand extends Command {
     // if (power > -0.95) {
     //   power =- 0.25;
     // }
-    m_hopper.hopperOn(); //-0.5
+    // An inactive HUB still accepts FUEL and can be used intentionally to move
+    // FUEL around the field. Leave that decision to the driver strategy.
+    m_hopper.hopperOn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.hopperOff();
   }
 
   // Returns true when the command should end.

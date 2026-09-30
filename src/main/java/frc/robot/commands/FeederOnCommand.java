@@ -40,12 +40,17 @@ public class FeederOnCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // An inactive HUB still accepts FUEL and can be used intentionally to move
+    // FUEL around the field. Hub activity is displayed to the driver, but this
+    // low-level mechanism command must not block that tactical choice.
     m_feeder.feederOn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_feeder.feederOff();
+  }
 
   // Returns true when the command should end.
   @Override

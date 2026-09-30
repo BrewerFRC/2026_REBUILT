@@ -23,7 +23,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 //import edu.wpi.first.wpilibj.AnalogInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.hubpositioninfo;
+import frc.robot.HubPositionInfo;
 
 /**
  * Controls the shooter hood angle, including a distance-based interpolation
@@ -107,7 +107,7 @@ public class hoodsubsystem extends SubsystemBase {
             hub_xposition = hub_xposition_red;
         } */
         //Translation2d hub_position = new Translation2d(hub_xposition, hub_yposition);
-        final Translation2d hub_position = hubpositioninfo.hubPosition();
+        final Translation2d hub_position = HubPositionInfo.hubPosition();
         Translation2d robotPosition = drive.getState().Pose.getTranslation();
         double distance = hub_position.getDistance(robotPosition);
         //Rotation2d hubdirection = hubdirectionBlueAlliance.rotateBy(m_drivetrain.getOperatorForwardDirection());

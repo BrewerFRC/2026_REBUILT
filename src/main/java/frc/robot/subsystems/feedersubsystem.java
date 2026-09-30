@@ -179,6 +179,7 @@ public class feedersubsystem extends SubsystemBase {
                 velocityRequest
                         .withVelocity(0)
         );
+        feedersubsystemState = feedersubsystemStates.FEEDER_OFF;
     }
 
 

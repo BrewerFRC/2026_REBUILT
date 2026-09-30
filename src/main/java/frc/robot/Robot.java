@@ -108,6 +108,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             SmartDashboard.putNumber("Pose Rotation", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees());
             SmartDashboard.putNumber("Hub Distance", m_robotContainer.m_shooter.getHubDistance());
             SmartDashboard.putNumber("Hood Rotation",m_robotContainer.m_hood.hoodMotor.getEncoder().getPosition());
+            SmartDashboard.putBoolean("REBUILT Hub Active", RebuiltMatchState.isHubActive());
+            SmartDashboard.putString("REBUILT Hub Phase", RebuiltMatchState.getHubPhase().toString());
+            SmartDashboard.putString("REBUILT Game Data", DriverStation.getGameSpecificMessage());
 
             SmartDashboard.putNumber("Arm Encoder Value", m_robotContainer.m_arm.armsubsystemMotor.getPosition().getValueAsDouble());
             SmartDashboard.putString("Alliance Selected", DriverStation.getAlliance().toString());

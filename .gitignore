@@ -3,6 +3,7 @@
 # Gradle build output
 build/
 bin/
+.gradle/
 
 # Do NOT ignore the Gradle wrapper jar/scripts - they must be committed so
 # teammates and CI can build without having Gradle preinstalled.
@@ -24,6 +25,9 @@ Thumbs.db
 # Simulation GUI state (machine-specific, regenerated automatically)
 *-sim-ds.json
 *-sim-elastic.json
+networktables.json
+simgui.json
+*-window.json
 
 # Log/replay files produced by robot code, not source
 *.wpilog

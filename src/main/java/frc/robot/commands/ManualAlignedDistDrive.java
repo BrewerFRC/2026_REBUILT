@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.hubpositioninfo;
+import frc.robot.HubPositionInfo;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -99,12 +99,11 @@ public final class ManualAlignedDistDrive extends Command {
             hub_xposition = hub_xposition_red;
         }
  */
-        hub_xposition = hubpositioninfo.hubPosition().getX(); 
+        hub_xposition = HubPositionInfo.hubPosition().getX();
         SmartDashboard.putNumber("hub_xposition", hub_xposition);
-        SmartDashboard.putNumber("angleflip",hubpositioninfo.cameraflip());
         
 
-        final Translation2d hub_position = hubpositioninfo.hubPosition();
+        final Translation2d hub_position = HubPositionInfo.hubPosition();
 
         Translation2d robotPosition = drive.getState().Pose.getTranslation();
         // robotPosition.addVisionMeasurement(17,4);
@@ -117,7 +116,7 @@ public final class ManualAlignedDistDrive extends Command {
         // } else {
         //     cameraflip = 0;
         // }
-        angle = hubpositioninfo.cameraflip()+Math.atan2(hub_position.getY() - robotPosition.getY(),hub_position.getX() - robotPosition.getX());
+        angle = Math.atan2(hub_position.getY() - robotPosition.getY(),hub_position.getX() - robotPosition.getX());
         SmartDashboard.putNumber("revised angle", angle);
         
         return new Rotation2d(angle);

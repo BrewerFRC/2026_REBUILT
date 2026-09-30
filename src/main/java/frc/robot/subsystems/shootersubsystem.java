@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.hubpositioninfo;
+import frc.robot.HubPositionInfo;
 
 
 /**
@@ -206,7 +206,7 @@ public class shootersubsystem extends SubsystemBase {
         } else {
             hub_xposition = hub_xposition_red;
         } */
-        final Translation2d hub_position = hubpositioninfo.hubPosition();
+        final Translation2d hub_position = HubPositionInfo.hubPosition();
         Translation2d robotPosition = drive.getState().Pose.getTranslation();
         double distance = hub_position.getDistance(robotPosition);
         //Rotation2d hubdirection = hubdirectionBlueAlliance.rotateBy(m_drivetrain.getOperatorForwardDirection());

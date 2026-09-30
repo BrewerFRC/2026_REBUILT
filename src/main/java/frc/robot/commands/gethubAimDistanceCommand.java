@@ -18,7 +18,7 @@ import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.RobotContainer;
-import frc.robot.hubpositioninfo;
+import frc.robot.HubPositionInfo;
 
 
 import java.util.Optional;
@@ -134,12 +134,11 @@ public class gethubAimDistanceCommand extends Command {
         }
  */
 
-        hub_xposition = hubpositioninfo.hubPosition().getX(); 
+        hub_xposition = HubPositionInfo.hubPosition().getX();
         SmartDashboard.putNumber("hub_xposition", hub_xposition);
-        SmartDashboard.putNumber("angleflip",hubpositioninfo.cameraflip());
         
 
-        final Translation2d hub_position = hubpositioninfo.hubPosition();
+        final Translation2d hub_position = HubPositionInfo.hubPosition();
 
         Translation2d robotPosition = drive.getState().Pose.getTranslation();
         // robotPosition.addVisionMeasurement(17,4);
@@ -152,7 +151,10 @@ public class gethubAimDistanceCommand extends Command {
         // } else {
         //     cameraflip = 0;
         // }
-        angle = hubpositioninfo.cameraflip()+Math.atan2(hub_position.getY() - robotPosition.getY(),hub_position.getX() - robotPosition.getX());
+        // Both the drivetrain pose and hub position are field-relative in WPILib's
+        // blue-origin coordinate frame. Adding an alliance flip here would turn the
+        // Blue target 180 degrees away from the HUB.
+        angle = Math.atan2(hub_position.getY() - robotPosition.getY(),hub_position.getX() - robotPosition.getX());
         SmartDashboard.putNumber("revised angle", angle);
         SmartDashboard.putNumber("LockedDirection",lockeddirection);
         SmartDashboard.putBoolean("Aligned Flag", alignedflag);
