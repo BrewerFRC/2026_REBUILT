@@ -11,15 +11,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.armsubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ArmDownCommand extends Command {
 
-  armsubsystem m_arm;
+  ArmSubsystem m_arm;
 
   /** Creates a new ArmDownCommand. */
-  public ArmDownCommand(armsubsystem param_arm) {
+  public ArmDownCommand(ArmSubsystem param_arm) {
     m_arm = param_arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_arm);
@@ -33,7 +33,7 @@ public class ArmDownCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.armsubsystemDown();
+    m_arm.ArmSubsystemDown();
   }
 
   // Called once the command ends or is interrupted.
@@ -44,7 +44,7 @@ public class ArmDownCommand extends Command {
   @Override
   public boolean isFinished() {
     if (m_arm.ArmlowerLimit() == true) {
-      m_arm.armsubsystemSTOP();
+      m_arm.ArmSubsystemSTOP();
       return true;
     } else {
       return false;

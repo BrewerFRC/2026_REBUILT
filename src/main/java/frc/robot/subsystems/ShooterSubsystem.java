@@ -34,12 +34,12 @@ import frc.robot.HubPositionInfo;
  * Controls the shooter flywheel motors, including hub-distance-based
  * interpolation of target RPS so shot power scales with range.
  */
-public class shootersubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
 
     private final TalonFX shooterMotorRight, shooterMotorLeft;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
-    
+
 
     public static Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 
@@ -67,21 +67,21 @@ public class shootersubsystem extends SubsystemBase {
     private double ks = 0.24;
     private double kv = 0.10;
 
-    
-    public enum shootersubsystemStates{
+
+    public enum ShooterSubsystemStates{
         SHOOTER_REV,    // Revving the Preshooter, not ready to shoot
         SHOOTER_SHOOTING,   // Shooter is shooting
         SHOOTER_OFF;     // Shooter is off
     }
-    public shootersubsystemStates shootersubsystemState = shootersubsystemStates.SHOOTER_OFF; //Default state
-        
+    public ShooterSubsystemStates ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_OFF; //Default state
 
-    /** Creates a new shootersubsystem. */
-    public shootersubsystem(CommandSwerveDrivetrain drivetrain) {
+
+    /** Creates a new ShooterSubsystem. */
+    public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
 
         drive = drivetrain;
-        shooterMotorRight = new TalonFX(OperatorConstants.shooterRightMotorID,OperatorConstants.canbusname);
-        shooterMotorLeft = new TalonFX(OperatorConstants.shooterLeftMotorID,OperatorConstants.canbusname);
+        shooterMotorRight = new TalonFX(OperatorConstants.SHOOTER_RIGHT_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
+        shooterMotorLeft = new TalonFX(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
 
          final TalonFXConfiguration shooterRightconfig = new TalonFXConfiguration()
          .withMotorOutput(
@@ -134,22 +134,22 @@ public class shootersubsystem extends SubsystemBase {
                 ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));;
 
         shooterMotorLeft.getConfigurator().apply(shooterLeftconfig);
-        // shootersubsystemMotor.getDutyCycle().setUpdateFrequency(100);
-        // shootersubsystemMotor.getTorqueCurrent().setUpdateFrequency(100);
-        // shootersubsystemMotor.getMotorVoltage().setUpdateFrequency(100);
+        // ShooterSubsystemMotor.getDutyCycle().setUpdateFrequency(100);
+        // ShooterSubsystemMotor.getTorqueCurrent().setUpdateFrequency(100);
+        // ShooterSubsystemMotor.getMotorVoltage().setUpdateFrequency(100);
 
-       // followershootersubsystemMotor.setControl(new Follower(OperatorConstants.shooterLeftMotorID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
+       // followerShooterSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
 
-        //shootersubsystemMotor.getConfigurator().apply(configright);
-       // followershootersubsystemMotor.getConfigurator().apply(configleft);
+        //ShooterSubsystemMotor.getConfigurator().apply(configright);
+       // followerShooterSubsystemMotor.getConfigurator().apply(configleft);
 
 
-        //followershootersubsystemMotor.setControl(new Follower(OperatorConstants.shooterLeftMotorID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
+        //followerShooterSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
 
         // var talonFXConfigs = new TalonFXConfiguration();
 
         // var slot0Configs = talonFXConfigs.Slot0;
-    
+
         // slot0Configs.kS = 1; // Add 0.1 V output to overcome static friction
         // slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
         // slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
@@ -159,18 +159,18 @@ public class shootersubsystem extends SubsystemBase {
         // configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        
 
-        // shootersubsystemMotor.getConfigurator().apply(slot0Configs);
+
+        // ShooterSubsystemMotor.getConfigurator().apply(slot0Configs);
 
         // configs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(60)).withPeakReverseTorqueCurrent(Amps.of(-60));
 
 
-        // shootersubsystemMotor.getConfigurator().apply(configs);
-        // followershootersubsystemMotor.getConfigurator().apply(configs);
-        // feedersubsystemMotor.getConfigurator().apply(configs);
+        // ShooterSubsystemMotor.getConfigurator().apply(configs);
+        // followerShooterSubsystemMotor.getConfigurator().apply(configs);
+        // FeederSubsystemMotor.getConfigurator().apply(configs);
 
-        //followershootersubsystemMotor.setControl(new Follower(OperatorConstants.preshooterMotor01ID, true));
+        //followerShooterSubsystemMotor.setControl(new Follower(OperatorConstants.preshooterMotor01ID, true));
         final double[][] shooterinterpvalues = new double[][] { {0,0}, {1, 45}, { 2.6, 50}, { 3.29, 52}, {4.6, 55}, {5.1, 60} };  //(distance (meters), shooter rps)
         for (double[] pair : shooterinterpvalues) {
             table.put(pair[0], pair[1]);
@@ -180,7 +180,7 @@ public class shootersubsystem extends SubsystemBase {
     @Override
     public void periodic() {
     // This method will be called once per scheduler run
-        SmartDashboard.putString("Shootersubsystem State",shootersubsystemState.toString());
+        SmartDashboard.putString("Shootersubsystem State",ShooterSubsystemState.toString());
         SmartDashboard.putNumber("Shootersubsystem Motor Speed",shooterMotorRight.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("FollowerShootersubsystem Motor Speed",shooterMotorLeft.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Shooter Motor RPS",shooterMotorRPS);
@@ -193,7 +193,7 @@ public class shootersubsystem extends SubsystemBase {
             table.put(pair[0], pair[1]);
         }
 
-        shootersubsystemState = shootersubsystemStates.SHOOTER_OFF;
+        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_OFF;
     }
 
     private double shooterError(){
@@ -238,7 +238,7 @@ public class shootersubsystem extends SubsystemBase {
     // }
 
     public void setRPS (){
-        //followershootersubsystemMotor.setControl(new Follower(OperatorConstants.shooterRightMotorID, MotorAlignmentValue.Opposed)); //might break canbus
+        //followerShooterSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_RIGHT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed)); //might break canbus
 
         //shooterMotorRight.setControl(new VelocityVoltage(shooterMotorRPS));
         //shooterMotorLeft.setControl(new V)
@@ -253,7 +253,7 @@ public class shootersubsystem extends SubsystemBase {
     public void ShooterOff(){
         shooterMotorRight.set(0);
         shooterMotorLeft.set(0);
-        shootersubsystemState = shootersubsystemStates.SHOOTER_OFF;
+        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_OFF;
     }
 
     public void Shoot(int POV){
@@ -266,21 +266,21 @@ public class shootersubsystem extends SubsystemBase {
         // }
 
         setRPS();
-        shootersubsystemState = shootersubsystemStates.SHOOTER_REV;
+        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_REV;
 
     }
 
     public void InterpolatedShoot(){
         shooterMotorRight.setControl(velocityRequest.withVelocity(getInterpolatedShooterVelocity()));
         shooterMotorLeft.setControl(velocityRequest.withVelocity(getInterpolatedShooterVelocity()));
-        shootersubsystemState = shootersubsystemStates.SHOOTER_REV;
+        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_REV;
 
     }
 
     public void RevShooters(){
         shooterMotorRight.setControl(velocityRequest.withVelocity(shooterMotorRPS));
         shooterMotorLeft.setControl(velocityRequest.withVelocity(shooterMotorRPS));
-        shootersubsystemState = shootersubsystemStates.SHOOTER_REV;
+        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_REV;
     }
 
 

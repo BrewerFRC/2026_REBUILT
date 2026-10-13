@@ -10,6 +10,8 @@ Install the 2026 WPILib tools, then from the project root run `./gradlew.bat bui
 
 See [the project layout](docs/project-layout.md) for the ownership of source, deploy assets, tests, vendor dependencies, and development tools.
 
+New students should start with the [command-based lifecycle](docs/command-based-lifecycle.md), then use the [control map](docs/controls.md), [REBUILT match flow](docs/match-flow.md), and [code-review checklist](docs/student-code-review-checklist.md) while making changes.
+
 ## REBUILT behavior implemented here
 
 - The scoring HUB is active during AUTO, the 10-second transition, and the final 30-second endgame.

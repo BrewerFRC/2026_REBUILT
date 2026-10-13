@@ -12,21 +12,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
 //import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.feedersubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FeederOffCommand extends Command {
 
 
-  feedersubsystem m_feeder;
-  
+  FeederSubsystem m_feeder;
+
   /** Creates a new shooterOnCommand. */
-  public FeederOffCommand(feedersubsystem param_feeder) {
+  public FeederOffCommand(FeederSubsystem param_feeder) {
     m_feeder= param_feeder;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_feeder);
-    
+
   }
 
   // Called when the command is initially scheduled.

@@ -20,7 +20,7 @@ import static edu.wpi.first.units.Units.*;
  * axes, with the inputs slew-rate-limited and zeroed out after a couple of
  * scheduler cycles of no input (to avoid drifting from stale ramped values).
  */
-public class teleopdriveCommand extends Command {
+public class TeleopDriveCommand extends Command {
     private CommandSwerveDrivetrain drive;
     private DoubleSupplier getLeftY;
     private DoubleSupplier getLeftX;
@@ -39,7 +39,7 @@ public class teleopdriveCommand extends Command {
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate*0.1) // Add a 15% deadband to maxSpeed
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-    public teleopdriveCommand(CommandSwerveDrivetrain commandSwerveDrivetrain, DoubleSupplier getLeftY, DoubleSupplier getLeftX, DoubleSupplier getRightX) {
+    public TeleopDriveCommand(CommandSwerveDrivetrain commandSwerveDrivetrain, DoubleSupplier getLeftY, DoubleSupplier getLeftX, DoubleSupplier getRightX) {
         this.drive = commandSwerveDrivetrain;
         this.getLeftY = getLeftY;
         this.getLeftX = getLeftX;

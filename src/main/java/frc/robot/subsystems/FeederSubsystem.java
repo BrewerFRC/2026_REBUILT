@@ -35,7 +35,7 @@ import frc.robot.Constants.OperatorConstants;
 
 
 /** Controls the feeder motor that pushes game pieces from the hopper into the shooter. */
-public class feedersubsystem extends SubsystemBase {
+public class FeederSubsystem extends SubsystemBase {
 
     private final TalonFX feederMotor;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
@@ -44,19 +44,19 @@ public class feedersubsystem extends SubsystemBase {
     private final double feederMotorRPS = 75; // was 75,60, 40, 70 RPS
 
 
-    public enum feedersubsystemStates{
+    public enum FeederSubsystemStates{
         FEEDER_REVERSE,    // Feeder motor is reverse
         FEEDER_ON,   // feeder is shooting
         FEEDER_OFF;     // feeder is off
     }
-    public feedersubsystemStates feedersubsystemState = feedersubsystemStates.FEEDER_OFF; //Default state
+    public FeederSubsystemStates FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF; //Default state
     private double passivecount = 0;
-        
 
-    /** Creates a new feedersubsystem. */
-    public feedersubsystem() {
 
-        feederMotor = new TalonFX(OperatorConstants.feederMotorID,OperatorConstants.canbusname);
+    /** Creates a new FeederSubsystem. */
+    public FeederSubsystem() {
+
+        feederMotor = new TalonFX(OperatorConstants.FEEDER_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
         final TalonFXConfiguration feederMotorconfig = new TalonFXConfiguration()
                 .withMotorOutput(
                         new MotorOutputConfigs()
@@ -79,7 +79,7 @@ public class feedersubsystem extends SubsystemBase {
 
         feederMotor.getConfigurator().apply(feederMotorconfig);
 
-        // private static final TalonFXConfiguration feedersubsystemconfig = new TalonFXConfiguration()
+        // private static final TalonFXConfiguration FeederSubsystemconfig = new TalonFXConfiguration()
         // .withCurrentLimits(
         //     new CurrentLimitsConfigs()
         //         // Swerve azimuth does not require much torque output, so we can set a relatively low
@@ -88,22 +88,22 @@ public class feedersubsystem extends SubsystemBase {
         //         .withStatorCurrentLimitEnable(true)
         // );
 
-        // feedersubsystemMotor.getDutyCycle().setUpdateFrequency(100);
-        // feedersubsystemMotor.getTorqueCurrent().setUpdateFrequency(100);
-        // feedersubsystemMotor.getMotorVoltage().setUpdateFrequency(100);
+        // FeederSubsystemMotor.getDutyCycle().setUpdateFrequency(100);
+        // FeederSubsystemMotor.getTorqueCurrent().setUpdateFrequency(100);
+        // FeederSubsystemMotor.getMotorVoltage().setUpdateFrequency(100);
 
-       // followerfeedersubsystemMotor.setControl(new Follower(OperatorConstants.shooterLeftMotorID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
+       // followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
 
-        //feedersubsystemMotor.getConfigurator().apply(configright);
-       // followerfeedersubsystemMotor.getConfigurator().apply(configleft);
+        //FeederSubsystemMotor.getConfigurator().apply(configright);
+       // followerFeederSubsystemMotor.getConfigurator().apply(configleft);
 
 
-        //followerfeedersubsystemMotor.setControl(new Follower(OperatorConstants.shooterLeftMotorID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
+        //followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
 
         // var talonFXConfigs = new TalonFXConfiguration();
 
         // var slot0Configs = talonFXConfigs.Slot0;
-    
+
         // slot0Configs.kS = 1; // Add 0.1 V output to overcome static friction
         // slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
         // slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
@@ -113,32 +113,32 @@ public class feedersubsystem extends SubsystemBase {
         // configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        
 
-        // feedersubsystemMotor.getConfigurator().apply(slot0Configs);
+
+        // FeederSubsystemMotor.getConfigurator().apply(slot0Configs);
 
         // configs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(60)).withPeakReverseTorqueCurrent(Amps.of(-60));
 
 
-        // feedersubsystemMotor.getConfigurator().apply(configs);
-        // followerfeedersubsystemMotor.getConfigurator().apply(configs);
-        // feedersubsystemMotor.getConfigurator().apply(configs);
+        // FeederSubsystemMotor.getConfigurator().apply(configs);
+        // followerFeederSubsystemMotor.getConfigurator().apply(configs);
+        // FeederSubsystemMotor.getConfigurator().apply(configs);
 
-        //followerfeedersubsystemMotor.setControl(new Follower(OperatorConstants.preshooterMotor01ID, true));
-        
+        //followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.preshooterMotor01ID, true));
+
     }
 
     @Override
     public void periodic() {
     // This method will be called once per scheduler run
-        SmartDashboard.putString("feedersubsystem State",feedersubsystemState.toString());
-        SmartDashboard.putNumber("feedersubsystem Motor Speed",feederMotor.get());
+        SmartDashboard.putString("FeederSubsystem State",FeederSubsystemState.toString());
+        SmartDashboard.putNumber("FeederSubsystem Motor Speed",feederMotor.get());
     }
 
     public void init() {
-    
 
-        feedersubsystemState = feedersubsystemStates.FEEDER_OFF;
+
+        FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
     }
 
     public void feederOn(){
@@ -160,7 +160,7 @@ public class feedersubsystem extends SubsystemBase {
                         .withVelocity(feederMotorRPS)
         );
         }
-        feedersubsystemState = feedersubsystemStates.FEEDER_ON;
+        FeederSubsystemState = FeederSubsystemStates.FEEDER_ON;
 
     }
 
@@ -179,7 +179,7 @@ public class feedersubsystem extends SubsystemBase {
                 velocityRequest
                         .withVelocity(0)
         );
-        feedersubsystemState = feedersubsystemStates.FEEDER_OFF;
+        FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
     }
 
 
@@ -189,7 +189,7 @@ public class feedersubsystem extends SubsystemBase {
                 velocityRequest
                         .withVelocity(-50)
         );
-        feedersubsystemState = feedersubsystemStates.FEEDER_REVERSE;
+        FeederSubsystemState = FeederSubsystemStates.FEEDER_REVERSE;
     }
 
     public void FeederPassiveReverse(){

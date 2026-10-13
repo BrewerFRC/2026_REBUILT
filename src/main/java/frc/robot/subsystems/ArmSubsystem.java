@@ -19,26 +19,26 @@ import frc.robot.Constants.OperatorConstants;
 //import edu.wpi.first.wpilibj.DigitalInput;
 
 /** Controls the single TalonFX motor that raises and lowers the arm. */
-public class armsubsystem extends SubsystemBase {
-  
-  public TalonFX armsubsystemMotor;
+public class ArmSubsystem extends SubsystemBase {
+
+  public TalonFX ArmSubsystemMotor;
   //private TalonFXConfiguration configs = new TalonFXConfiguration();
 
   // private DigitalInput lowerLimit02 = new DigitalInput(Constants.OperatorConstants.lowerlimitID02);
   // private DigitalInput lowerLimit01 = new DigitalInput(Constants.OperatorConstants.lowerlimitID01);
   // private DigitalInput upperLimit = new DigitalInput(Constants.OperatorConstants.upperlimitID);
-  
-  public enum armsubsystemStates{
-        MOVING_UP,    // The armsubsystem is moving up
-        MOVING_DOWN,    // The armsubsystem is moving down
-        ARM_UP,       // armsubsystem is up
-        ARM_DOWN;     // armsubsystem is down
+
+  public enum ArmSubsystemStates{
+        MOVING_UP,    // The ArmSubsystem is moving up
+        MOVING_DOWN,    // The ArmSubsystem is moving down
+        ARM_UP,       // ArmSubsystem is up
+        ARM_DOWN;     // ArmSubsystem is down
   }
-  public armsubsystemStates armsubsystemState = armsubsystemStates.ARM_UP; //Default state
-  
-  /** Creates a new armsubsystem. */
-  public armsubsystem() {
-    armsubsystemMotor = new TalonFX(OperatorConstants.armMotorID,OperatorConstants.canbusname);
+  public ArmSubsystemStates ArmSubsystemState = ArmSubsystemStates.ARM_UP; //Default state
+
+  /** Creates a new ArmSubsystem. */
+  public ArmSubsystem() {
+    ArmSubsystemMotor = new TalonFX(OperatorConstants.ARM_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
     final TalonFXConfiguration armMotorConfig = new TalonFXConfiguration()
         .withCurrentLimits(new CurrentLimitsConfigs()
             .withStatorCurrentLimit(50) // not present before
@@ -47,31 +47,31 @@ public class armsubsystem extends SubsystemBase {
             .withStatorCurrentLimitEnable(true))    //not present before
         .withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));
 
-    armsubsystemMotor.getConfigurator().apply(armMotorConfig);
-    armsubsystemMotor.setPosition(0); 
+    ArmSubsystemMotor.getConfigurator().apply(armMotorConfig);
+    ArmSubsystemMotor.setPosition(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putString("armsubsystem State",armsubsystemState.toString());
-    SmartDashboard.putNumber("armsubsystem Motor Speed",armsubsystemMotor.get());
-    SmartDashboard.putNumber("Arm Encoder Value", armsubsystemMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putString("ArmSubsystem State",ArmSubsystemState.toString());
+    SmartDashboard.putNumber("ArmSubsystem Motor Speed",ArmSubsystemMotor.get());
+    SmartDashboard.putNumber("Arm Encoder Value", ArmSubsystemMotor.getPosition().getValueAsDouble());
   }
 
   public void init(){
-      //armsubsystemMotor.setInverted(true);
-      armsubsystemMotor.setPosition(0);
-      armsubsystemUP();
+      //ArmSubsystemMotor.setInverted(true);
+      ArmSubsystemMotor.setPosition(0);
+      ArmSubsystemUP();
     /*configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 50.0;
     configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    armsubsystemMotor.getConfigurator().apply(configs);*/
-    
+    ArmSubsystemMotor.getConfigurator().apply(configs);*/
+
   }
-  
+
   public boolean ArmlowerLimit(){
-    if (Math.abs(Math.abs(armsubsystemMotor.getPosition().getValueAsDouble()) - 17.4) < 0.5) {  //lowerLimit01.get() || lowerLimit02.get() || 
-      armsubsystemSTOP();
+    if (Math.abs(Math.abs(ArmSubsystemMotor.getPosition().getValueAsDouble()) - 17.4) < 0.5) {  //lowerLimit01.get() || lowerLimit02.get() ||
+      ArmSubsystemSTOP();
       return true;
     } else {
       return false;
@@ -79,40 +79,40 @@ public class armsubsystem extends SubsystemBase {
   }
 
   public boolean ArmUpperLimit(){  //limit of somesort
-    if (Math.abs(Math.abs(armsubsystemMotor.getPosition().getValueAsDouble())) < 0.5){     //!upperLimit.get() || 
-        armsubsystemSTOP();
+    if (Math.abs(Math.abs(ArmSubsystemMotor.getPosition().getValueAsDouble())) < 0.5){     //!upperLimit.get() ||
+        ArmSubsystemSTOP();
         return true;
       } else {
         return false;
       }
-    //armsubsystemMotor.getFault_ForwardSoftLimit().getValue()
+    //ArmSubsystemMotor.getFault_ForwardSoftLimit().getValue()
   }
 
-  public void armsubsystemUP(){
-    // if (ArmUpperLimit()){  
-    //   armsubsystemSTOP();
-    //   armsubsystemState = armsubsystemState.ARM_UP;
+  public void ArmSubsystemUP(){
+    // if (ArmUpperLimit()){
+    //   ArmSubsystemSTOP();
+    //   ArmSubsystemState = ArmSubsystemState.ARM_UP;
     // } else {
-      armsubsystemMotor.set(-0.3);
-      armsubsystemState = armsubsystemState.MOVING_UP;
+      ArmSubsystemMotor.set(-0.3);
+      ArmSubsystemState = ArmSubsystemState.MOVING_UP;
     // }
 
     //System.out.println("Arm Up");
   }
 
-  public void armsubsystemDown(){
+  public void ArmSubsystemDown(){
     //System.out.println("Arm Down");
     // if (ArmlowerLimit()){
-    //   armsubsystemSTOP();
-    //   armsubsystemState = armsubsystemState.ARM_DOWN;
+    //   ArmSubsystemSTOP();
+    //   ArmSubsystemState = ArmSubsystemState.ARM_DOWN;
     // } else {
-      armsubsystemMotor.set(0.3);
-      armsubsystemState = armsubsystemStates.MOVING_DOWN;
+      ArmSubsystemMotor.set(0.3);
+      ArmSubsystemState = ArmSubsystemStates.MOVING_DOWN;
     //}
   }
 
-  public void armsubsystemSTOP(){
-    armsubsystemMotor.set(0);
+  public void ArmSubsystemSTOP(){
+    ArmSubsystemMotor.set(0);
     //System.out.println("Arm Stopped");
   }
 }

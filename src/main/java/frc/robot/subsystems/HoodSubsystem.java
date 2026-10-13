@@ -29,15 +29,15 @@ import frc.robot.HubPositionInfo;
  * Controls the shooter hood angle, including a distance-based interpolation
  * lookup so the hood auto-adjusts as the robot's range to the hub changes.
  */
-public class hoodsubsystem extends SubsystemBase {
-  
+public class HoodSubsystem extends SubsystemBase {
+
     public static Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 
     private final CommandSwerveDrivetrain drive;
 
     private InterpolatingDoubleTreeMap table = new InterpolatingDoubleTreeMap();
 
-    
+
 
     // private DigitalInput hoodlimit = new DigitalInput(Constants.OperatorConstants.hoodLimit);
 
@@ -52,21 +52,21 @@ public class hoodsubsystem extends SubsystemBase {
     //TalonFXConfiguration configs = new TalonFXConfiguration();
     public SparkMax hoodMotor;
     SparkMaxConfig config2Config = new SparkMaxConfig();
-    
-  
+
+
     public enum hoodSubtemStates{
-        HOOD_REVERSE,    // The hoodsubsystem is reversed
-        HOOD_OFF,    // The hoodsubsystem is off
-        HOOD_ON;     // hoodsubsystem is on
+        HOOD_REVERSE,    // The HoodSubsystem is reversed
+        HOOD_OFF,    // The HoodSubsystem is off
+        HOOD_ON;     // HoodSubsystem is on
     }
     public hoodSubtemStates hoodSubstemState = hoodSubtemStates.HOOD_OFF; //Default state
-    
-    /** Creates a new hoodsubsystem. */
-    public hoodsubsystem(CommandSwerveDrivetrain drivetrain) {
+
+    /** Creates a new HoodSubsystem. */
+    public HoodSubsystem(CommandSwerveDrivetrain drivetrain) {
         drive = drivetrain;
 
-        //hoodstemMotor = new TalonFX(OperatorConstants.hoodMotorID,OperatorConstants.canbusname);
-        hoodMotor = new SparkMax(OperatorConstants.hoodMotorID, MotorType.kBrushless);
+        //hoodstemMotor = new TalonFX(OperatorConstants.HOOD_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
+        hoodMotor = new SparkMax(OperatorConstants.HOOD_MOTOR_CAN_ID, MotorType.kBrushless);
         hoodMotor.getEncoder().setPosition(0);
         final double[][] shooterinterpvalues = new double[][] { {0,0}, { 2.6, 0}, { 3.29, 5.43}, {4.6, 13.4}, {5.1, 13.6} };  //(distance (meters), encoder values)
         for (double[] pair : shooterinterpvalues) {
@@ -137,13 +137,13 @@ public class hoodsubsystem extends SubsystemBase {
             //} else {
             //    hoodMotor.set(0);
             // }
-        
+
             //hoodMotor.set(0.02);
             //System.out.println("hood On");
             hoodSubstemState = hoodSubtemStates.HOOD_ON;
         }
     }
-    
+
     public boolean ishoodReady(){
         double Targetangle = InterpolatedHoodAngle();
         return (Math.abs(Targetangle - hoodMotor.getEncoder().getPosition()) < 0.2);
