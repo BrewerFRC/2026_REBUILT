@@ -5,15 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.armsubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ArmStopCommand extends Command {
-  armsubsystem m_arm;
+  ArmSubsystem m_arm;
   /** Creates a new ArmStopCommand. */
-  public ArmStopCommand(armsubsystem param_arm) {
+  public ArmStopCommand(ArmSubsystem param_arm) {
     m_arm = param_arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_arm);
@@ -26,7 +26,7 @@ public class ArmStopCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.armsubsystemSTOP();
+    m_arm.ArmSubsystemSTOP();
   }
 
   // Called once the command ends or is interrupted.
