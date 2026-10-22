@@ -1,202 +1,80 @@
-    // Copyright (c) FIRST and other WPILib contributors.
-    // Open Source Software; you can modify and/or share it under the terms of
-    // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
-
-//import static edu.wpi.first.units.Units.Amps;
-
-
-//import java.util.Optional;
-
 
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-//import com.ctre.phoenix6.controls.Follower;
-//import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-//import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-//import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
-//import edu.wpi.first.math.geometry.Rotation2d;
-//import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-//import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OperatorConstants;
 
-
-/** Controls the feeder motor that pushes game pieces from the hopper into the shooter. */
+/** Controls the feeder motor that moves FUEL from the hopper into the shooter. */
 public class FeederSubsystem extends SubsystemBase {
+  private static final double FEEDER_RPS = 75;
+  private static final double PREPARE_RPS = -25;
+  private static final double REVERSE_RPS = -50;
+  private static final double PREPARE_SECONDS = 0.50;
+  private final TalonFX feederMotor;
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
+  private final Timer feedPreparationTimer = new Timer();
 
-    private final TalonFX feederMotor;
-    private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
-    private final VoltageOut voltageRequest = new VoltageOut(0);
+  public enum FeederSubsystemStates { FEEDER_REVERSE, FEEDER_ON, FEEDER_OFF }
+  public FeederSubsystemStates FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
 
-    private final double feederMotorRPS = 75; // was 75,60, 40, 70 RPS
+  public FeederSubsystem() {
+    feederMotor = new TalonFX(OperatorConstants.FEEDER_MOTOR_CAN_ID, OperatorConstants.CANIVORE_BUS);
+    TalonFXConfiguration feederMotorConfig = new TalonFXConfiguration()
+        .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast)
+            .withInverted(InvertedValue.CounterClockwise_Positive))
+        .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(50)
+            .withStatorCurrentLimitEnable(true).withSupplyCurrentLimit(40)
+            .withSupplyCurrentLimitEnable(true))
+        .withSlot0(new Slot0Configs().withKP(0.5).withKS(0.28).withKV(0.1))
+        .withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.1));
+    SmartDashboard.putBoolean(
+        "Feeder/Configuration Applied", feederMotor.getConfigurator().apply(feederMotorConfig).isOK());
+  }
 
+  @Override
+  public void periodic() {
+    SmartDashboard.putString("FeederSubsystem State", FeederSubsystemState.toString());
+    SmartDashboard.putNumber("Feeder/Velocity RPS", feederMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder/Applied Volts", feederMotor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder/Supply Current Amps", feederMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder/Stator Current Amps", feederMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder/Temperature C", feederMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder/Fault Bits", feederMotor.getFaultField().getValueAsDouble());
+  }
 
-    public enum FeederSubsystemStates{
-        FEEDER_REVERSE,    // Feeder motor is reverse
-        FEEDER_ON,   // feeder is shooting
-        FEEDER_OFF;     // feeder is off
-    }
-    public FeederSubsystemStates FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF; //Default state
-    private double passivecount = 0;
+  /** Starts the one-time, half-second reverse preparation for a new feed request. */
+  public void beginFeeding() {
+    feedPreparationTimer.restart();
+    FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
+  }
 
+  /** Runs preparation briefly, then forward feed; duration is independent of scheduler frequency. */
+  public void feederOn() {
+    double targetRps = feedPreparationTimer.hasElapsed(PREPARE_SECONDS) ? FEEDER_RPS : PREPARE_RPS;
+    feederMotor.setControl(velocityRequest.withVelocity(targetRps));
+    FeederSubsystemState = FeederSubsystemStates.FEEDER_ON;
+  }
 
-    /** Creates a new FeederSubsystem. */
-    public FeederSubsystem() {
+  public void feederOff() {
+    feedPreparationTimer.stop();
+    feedPreparationTimer.reset();
+    feederMotor.setControl(velocityRequest.withVelocity(0));
+    FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
+  }
 
-        feederMotor = new TalonFX(OperatorConstants.FEEDER_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
-        final TalonFXConfiguration feederMotorconfig = new TalonFXConfiguration()
-                .withMotorOutput(
-                        new MotorOutputConfigs()
-                                .withNeutralMode(NeutralModeValue.Coast)
-                                .withInverted(InvertedValue.CounterClockwise_Positive)
-                )
-                .withCurrentLimits(
-                        new CurrentLimitsConfigs()
-                                .withStatorCurrentLimit(50) //was 100
-                                .withStatorCurrentLimitEnable(true)
-                                .withSupplyCurrentLimit(40)
-                                .withSupplyCurrentLimitEnable(true)
-                )
-                .withSlot0(
-                        new Slot0Configs()
-                                .withKP(0.5)
-                                .withKS(0.28)
-                                .withKV(0.1)
-                ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.1));
-
-        feederMotor.getConfigurator().apply(feederMotorconfig);
-
-        // private static final TalonFXConfiguration FeederSubsystemconfig = new TalonFXConfiguration()
-        // .withCurrentLimits(
-        //     new CurrentLimitsConfigs()
-        //         // Swerve azimuth does not require much torque output, so we can set a relatively low
-        //         // stator current limit to help avoid brownouts without impacting performance.
-        //         .withStatorCurrentLimit(Amps.of(40))
-        //         .withStatorCurrentLimitEnable(true)
-        // );
-
-        // FeederSubsystemMotor.getDutyCycle().setUpdateFrequency(100);
-        // FeederSubsystemMotor.getTorqueCurrent().setUpdateFrequency(100);
-        // FeederSubsystemMotor.getMotorVoltage().setUpdateFrequency(100);
-
-       // followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
-
-        //FeederSubsystemMotor.getConfigurator().apply(configright);
-       // followerFeederSubsystemMotor.getConfigurator().apply(configleft);
-
-
-        //followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.SHOOTER_LEFT_MOTOR_CAN_ID, MotorAlignmentValue.Opposed).withUpdateFreqHz(100)); //might break canbus
-
-        // var talonFXConfigs = new TalonFXConfiguration();
-
-        // var slot0Configs = talonFXConfigs.Slot0;
-
-        // slot0Configs.kS = 1; // Add 0.1 V output to overcome static friction
-        // slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-        // slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
-        // slot0Configs.kI = 0; // no output for integrated error
-        // slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
-
-        // configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        // configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-
-
-        // FeederSubsystemMotor.getConfigurator().apply(slot0Configs);
-
-        // configs.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(60)).withPeakReverseTorqueCurrent(Amps.of(-60));
-
-
-        // FeederSubsystemMotor.getConfigurator().apply(configs);
-        // followerFeederSubsystemMotor.getConfigurator().apply(configs);
-        // FeederSubsystemMotor.getConfigurator().apply(configs);
-
-        //followerFeederSubsystemMotor.setControl(new Follower(OperatorConstants.preshooterMotor01ID, true));
-
-    }
-
-    @Override
-    public void periodic() {
-    // This method will be called once per scheduler run
-        SmartDashboard.putString("FeederSubsystem State",FeederSubsystemState.toString());
-        SmartDashboard.putNumber("FeederSubsystem Motor Speed",feederMotor.get());
-    }
-
-    public void init() {
-
-
-        FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
-    }
-
-    public void feederOn(){
-
-        if (isFeederOff()) {
-            passivecount = 0;
-        }
-
-        if (passivecount < 25){
-            passivecount = passivecount + 1;
-            feederMotor.setControl(
-                        velocityRequest
-                                .withVelocity(-25)
-                );
-        } else {
-        //feederMotor.set(feederMotorPower);
-        feederMotor.setControl(
-                velocityRequest
-                        .withVelocity(feederMotorRPS)
-        );
-        }
-        FeederSubsystemState = FeederSubsystemStates.FEEDER_ON;
-
-    }
-
-    private boolean isFeederOff(){
-        if (feederMotor.get() == 0){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void feederOff(){
-
-        //feederMotor.set(0);
-        feederMotor.setControl(
-                velocityRequest
-                        .withVelocity(0)
-        );
-        FeederSubsystemState = FeederSubsystemStates.FEEDER_OFF;
-    }
-
-
-    public void feederReverse(){
-        //feederMotor.set(-0.5);
-        feederMotor.setControl(
-                velocityRequest
-                        .withVelocity(-50)
-        );
-        FeederSubsystemState = FeederSubsystemStates.FEEDER_REVERSE;
-    }
-
-    public void FeederPassiveReverse(){
-        feederMotor.setControl(
-                        velocityRequest
-                                .withVelocity(-10)
-                );
-            }
-
+  public void feederReverse() {
+    feedPreparationTimer.stop();
+    feederMotor.setControl(velocityRequest.withVelocity(REVERSE_RPS));
+    FeederSubsystemState = FeederSubsystemStates.FEEDER_REVERSE;
+  }
 }

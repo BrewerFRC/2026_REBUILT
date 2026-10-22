@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,6 +48,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("REBUILT Hub Active", RebuiltMatchState.isHubActive());
     SmartDashboard.putString("REBUILT Hub Phase", RebuiltMatchState.getHubPhase().toString());
     SmartDashboard.putString("REBUILT Game Data", DriverStation.getGameSpecificMessage());
+    SmartDashboard.putNumber("Robot/Battery Volts", RobotController.getBatteryVoltage());
+    SmartDashboard.putBoolean("Robot/Browned Out", RobotController.isBrownedOut());
   }
 
   /**

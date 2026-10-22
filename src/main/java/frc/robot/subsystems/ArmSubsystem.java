@@ -1,118 +1,101 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-//import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 
-//import edu.wpi.first.wpilibj.AnalogInput;
-//import edu.wpi.first.wpilibj.DigitalInput;
-
-/** Controls the single TalonFX motor that raises and lowers the arm. */
+/** Controls the arm using its integrated motor encoder as the sole position reference. */
 public class ArmSubsystem extends SubsystemBase {
+  /** The known, fully retracted position at robot power-on. Verify this before enabling. */
+  private static final double STOWED_POSITION_ROTATIONS = 0.0;
+  private static final double EXTENDED_POSITION_ROTATIONS = 17.4;
+  private static final double POSITION_TOLERANCE_ROTATIONS = 0.5;
+  // 30% duty cycle at a nominal 12 V battery, now held constant as battery voltage changes.
+  private static final double MANUAL_ARM_VOLTAGE = 3.6;
+  private static final double OPEN_LOOP_RAMP_SECONDS = 0.15;
 
-  public TalonFX ArmSubsystemMotor;
-  //private TalonFXConfiguration configs = new TalonFXConfiguration();
+  public final TalonFX ArmSubsystemMotor;
+  private final VoltageOut voltageRequest = new VoltageOut(0);
 
-  // private DigitalInput lowerLimit02 = new DigitalInput(Constants.OperatorConstants.lowerlimitID02);
-  // private DigitalInput lowerLimit01 = new DigitalInput(Constants.OperatorConstants.lowerlimitID01);
-  // private DigitalInput upperLimit = new DigitalInput(Constants.OperatorConstants.upperlimitID);
+  public enum ArmSubsystemStates { MOVING_UP, MOVING_DOWN, ARM_UP, ARM_DOWN }
 
-  public enum ArmSubsystemStates{
-        MOVING_UP,    // The ArmSubsystem is moving up
-        MOVING_DOWN,    // The ArmSubsystem is moving down
-        ARM_UP,       // ArmSubsystem is up
-        ARM_DOWN;     // ArmSubsystem is down
-  }
-  public ArmSubsystemStates ArmSubsystemState = ArmSubsystemStates.ARM_UP; //Default state
+  public ArmSubsystemStates ArmSubsystemState = ArmSubsystemStates.ARM_UP;
 
-  /** Creates a new ArmSubsystem. */
+  /** Creates the motor configuration and establishes the encoder reference exactly once. */
   public ArmSubsystem() {
-    ArmSubsystemMotor = new TalonFX(OperatorConstants.ARM_MOTOR_CAN_ID,OperatorConstants.CANIVORE_BUS);
-    final TalonFXConfiguration armMotorConfig = new TalonFXConfiguration()
-        .withCurrentLimits(new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(50) // not present before
-            .withStatorCurrentLimitEnable(true) //not present before
-            .withSupplyCurrentLimit(50) //not present before
-            .withStatorCurrentLimitEnable(true))    //not present before
-        .withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));
+    ArmSubsystemMotor =
+        new TalonFX(OperatorConstants.ARM_MOTOR_CAN_ID, OperatorConstants.CANIVORE_BUS);
+    TalonFXConfiguration armMotorConfig =
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withStatorCurrentLimit(50)
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(50)
+                    .withSupplyCurrentLimitEnable(true))
+            .withOpenLoopRamps(
+                new OpenLoopRampsConfigs().withVoltageOpenLoopRampPeriod(OPEN_LOOP_RAMP_SECONDS));
 
-    ArmSubsystemMotor.getConfigurator().apply(armMotorConfig);
-    ArmSubsystemMotor.setPosition(0);
+    SmartDashboard.putBoolean(
+        "Arm/Configuration Applied", ArmSubsystemMotor.getConfigurator().apply(armMotorConfig).isOK());
+    // There are no limit switches. This is valid only when the robot begins physically stowed.
+    ArmSubsystemMotor.setPosition(STOWED_POSITION_ROTATIONS);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putString("ArmSubsystem State",ArmSubsystemState.toString());
-    SmartDashboard.putNumber("ArmSubsystem Motor Speed",ArmSubsystemMotor.get());
-    SmartDashboard.putNumber("Arm Encoder Value", ArmSubsystemMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putString("ArmSubsystem State", ArmSubsystemState.toString());
+    SmartDashboard.putNumber("Arm/Position Rotations", positionRotations());
+    SmartDashboard.putNumber("Arm/Applied Volts", ArmSubsystemMotor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("Arm/Supply Current Amps", ArmSubsystemMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Arm/Stator Current Amps", ArmSubsystemMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Arm/Temperature C", ArmSubsystemMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Arm/Fault Bits", ArmSubsystemMotor.getFaultField().getValueAsDouble());
   }
 
-  public void init(){
-      //ArmSubsystemMotor.setInverted(true);
-      ArmSubsystemMotor.setPosition(0);
-      ArmSubsystemUP();
-    /*configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 50.0;
-    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    ArmSubsystemMotor.getConfigurator().apply(configs);*/
-
+  /** Returns whether the arm is at its extended travel boundary. */
+  public boolean ArmlowerLimit() {
+    return positionRotations() >= EXTENDED_POSITION_ROTATIONS - POSITION_TOLERANCE_ROTATIONS;
   }
 
-  public boolean ArmlowerLimit(){
-    if (Math.abs(Math.abs(ArmSubsystemMotor.getPosition().getValueAsDouble()) - 17.4) < 0.5) {  //lowerLimit01.get() || lowerLimit02.get() ||
+  /** Returns whether the arm is at its stowed travel boundary. */
+  public boolean ArmUpperLimit() {
+    return positionRotations() <= STOWED_POSITION_ROTATIONS + POSITION_TOLERANCE_ROTATIONS;
+  }
+
+  /** Moves toward stow, but never commands farther past the stowed encoder boundary. */
+  public void ArmSubsystemUP() {
+    if (ArmUpperLimit()) {
       ArmSubsystemSTOP();
-      return true;
-    } else {
-      return false;
+      ArmSubsystemState = ArmSubsystemStates.ARM_UP;
+      return;
     }
+    ArmSubsystemMotor.setControl(voltageRequest.withOutput(-MANUAL_ARM_VOLTAGE));
+    ArmSubsystemState = ArmSubsystemStates.MOVING_UP;
   }
 
-  public boolean ArmUpperLimit(){  //limit of somesort
-    if (Math.abs(Math.abs(ArmSubsystemMotor.getPosition().getValueAsDouble())) < 0.5){     //!upperLimit.get() ||
-        ArmSubsystemSTOP();
-        return true;
-      } else {
-        return false;
-      }
-    //ArmSubsystemMotor.getFault_ForwardSoftLimit().getValue()
+  /** Moves toward extension, but never commands farther past the extended encoder boundary. */
+  public void ArmSubsystemDown() {
+    if (ArmlowerLimit()) {
+      ArmSubsystemSTOP();
+      ArmSubsystemState = ArmSubsystemStates.ARM_DOWN;
+      return;
+    }
+    ArmSubsystemMotor.setControl(voltageRequest.withOutput(MANUAL_ARM_VOLTAGE));
+    ArmSubsystemState = ArmSubsystemStates.MOVING_DOWN;
   }
 
-  public void ArmSubsystemUP(){
-    // if (ArmUpperLimit()){
-    //   ArmSubsystemSTOP();
-    //   ArmSubsystemState = ArmSubsystemState.ARM_UP;
-    // } else {
-      ArmSubsystemMotor.set(-0.3);
-      ArmSubsystemState = ArmSubsystemState.MOVING_UP;
-    // }
-
-    //System.out.println("Arm Up");
+  /** Immediately removes the arm command; commands also call this from {@code end()}. */
+  public void ArmSubsystemSTOP() {
+    ArmSubsystemMotor.setControl(voltageRequest.withOutput(0));
   }
 
-  public void ArmSubsystemDown(){
-    //System.out.println("Arm Down");
-    // if (ArmlowerLimit()){
-    //   ArmSubsystemSTOP();
-    //   ArmSubsystemState = ArmSubsystemState.ARM_DOWN;
-    // } else {
-      ArmSubsystemMotor.set(0.3);
-      ArmSubsystemState = ArmSubsystemStates.MOVING_DOWN;
-    //}
-  }
-
-  public void ArmSubsystemSTOP(){
-    ArmSubsystemMotor.set(0);
-    //System.out.println("Arm Stopped");
+  private double positionRotations() {
+    return ArmSubsystemMotor.getPosition().getValueAsDouble();
   }
 }

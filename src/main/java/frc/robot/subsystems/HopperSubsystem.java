@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 //import com.revrobotics.ResetMode;
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 //import com.revrobotics.spark.SparkMax;
 //import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -32,9 +33,11 @@ public class HopperSubsystem extends SubsystemBase {
     //private TalonFXConfiguration configs = new TalonFXConfiguration();
     //private SparkMax HopperSubsystemMotor;
 
-    double targetpower = - 0.75;  //was -0.4
-    double startpower = 0;
-    double power = startpower;
+    private static final double FORWARD_OUTPUT = -0.75;
+    private static final double REVERSE_OUTPUT = 0.55;
+    // Output units per second; forward and reverse now receive the same gentle ramp.
+    private static final double OUTPUT_RAMP_PER_SECOND = 1.5;
+    private final SlewRateLimiter outputLimiter = new SlewRateLimiter(OUTPUT_RAMP_PER_SECOND);
 
     public enum HopperSubsystemStates{
         HOPPER_REVERSE,    // The HopperSubsystem is reversed
@@ -60,37 +63,19 @@ public class HopperSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("HopperSubsystem Motor Speed",HopperSubsystemMotor.get());
     }
 
-    public void init() {
-        HopperSubsystemState = HopperSubsystemStates.HOPPER_OFF;
-    }
-
-    public void hopperOn() { //double targetPower
-        // if (power > targetPower) {
-        //     power =- 0.25;
-        // }
-        if (Math.abs(power) < Math.abs(targetpower)){
-            if (targetpower < 0){
-                power = power - 0.005;
-            } else {
-                power = power + 0.005;
-            }
-        }
-        HopperSubsystemMotor.set(power);
-        //System.out.println("Hopper On");
+    public void hopperOn() {
+        HopperSubsystemMotor.set(outputLimiter.calculate(FORWARD_OUTPUT));
         HopperSubsystemState = HopperSubsystemStates.HOPPER_ON;
     }
 
     public void hopperOff() {
         HopperSubsystemMotor.set(0);
-        //power = -0.3;
-        power = 0;
-        //System.out.println("Hopper Off");
+        outputLimiter.reset(0);
         HopperSubsystemState = HopperSubsystemStates.HOPPER_OFF;
     }
 
     public void hopperReverse() {
-        HopperSubsystemMotor.set(0.55);
-        //System.out.println("Hopper Reversed");
+        HopperSubsystemMotor.set(outputLimiter.calculate(REVERSE_OUTPUT));
         HopperSubsystemState = HopperSubsystemStates.HOPPER_REVERSE;
     }
 }

@@ -1,125 +1,72 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-//import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-//import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
-//import edu.wpi.first.wpilibj2.command.Command;
-//import frc.robot.subsystems.CommandSwerveDrivetrain;
-
-import static edu.wpi.first.units.Units.*;
-
-/**
- * Default teleop driving command: field-centric swerve drive from joystick
- * axes, with the inputs slew-rate-limited and zeroed out after a couple of
- * scheduler cycles of no input (to avoid drifting from stale ramped values).
- */
+/** Default field-centric teleop drive with time-based joystick slew limiting. */
 public class TeleopDriveCommand extends Command {
-    private CommandSwerveDrivetrain drive;
-    private DoubleSupplier getLeftY;
-    private DoubleSupplier getLeftX;
-    private DoubleSupplier getRightX;
-    private double drive_ramprate = 0.02;
-    private double turn_ramprate = 0.04;
-    private double currdrivexinput = 0;
-    private double currdriveyinput = 0;
-    private double currrotinput = 0;
-    private double inputtracker = 0;
+  private static final double JOYSTICK_DEADBAND = 0.10;
+  private static final double DRIVE_INPUT_RATE_PER_SECOND = 1.0;
+  private static final double TURN_INPUT_RATE_PER_SECOND = 2.0;
+  public static final double MaxSpeed = 0.7 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+  public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
 
-    public static double MaxSpeed = 0.7*TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+  private final CommandSwerveDrivetrain drive;
+  private final DoubleSupplier getLeftY;
+  private final DoubleSupplier getLeftX;
+  private final DoubleSupplier getRightX;
+  private final SlewRateLimiter forwardLimiter = new SlewRateLimiter(DRIVE_INPUT_RATE_PER_SECOND);
+  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(DRIVE_INPUT_RATE_PER_SECOND);
+  private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(TURN_INPUT_RATE_PER_SECOND);
+  private final SwerveRequest.FieldCentric fieldcentricrequest =
+      new SwerveRequest.FieldCentric()
+          .withDeadband(MaxSpeed * JOYSTICK_DEADBAND)
+          .withRotationalDeadband(MaxAngularRate * JOYSTICK_DEADBAND)
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    private final SwerveRequest.FieldCentric fieldcentricrequest = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate*0.1) // Add a 15% deadband to maxSpeed
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+  public TeleopDriveCommand(
+      CommandSwerveDrivetrain commandSwerveDrivetrain,
+      DoubleSupplier getLeftY,
+      DoubleSupplier getLeftX,
+      DoubleSupplier getRightX) {
+    drive = commandSwerveDrivetrain;
+    this.getLeftY = getLeftY;
+    this.getLeftX = getLeftX;
+    this.getRightX = getRightX;
+    addRequirements(drive);
+  }
 
-    public TeleopDriveCommand(CommandSwerveDrivetrain commandSwerveDrivetrain, DoubleSupplier getLeftY, DoubleSupplier getLeftX, DoubleSupplier getRightX) {
-        this.drive = commandSwerveDrivetrain;
-        this.getLeftY = getLeftY;
-        this.getLeftX = getLeftX;
-        this.getRightX = getRightX;
-        // each subsystem used by the command must be passed into the
-        // addRequirements() method (which takes a vararg of Subsystem)
-        addRequirements(drive);
-    }
+  @Override
+  public void initialize() {
+    forwardLimiter.reset(0.0);
+    leftLimiter.reset(0.0);
+    rotationLimiter.reset(0.0);
+  }
 
-    @Override
-    public void initialize() {
-        currdrivexinput = 0;
-        currdriveyinput = 0;
-        currrotinput = 0;
-    }
+  @Override
+  public void execute() {
+    double forward = forwardLimiter.calculate(MathUtil.applyDeadband(getLeftY.getAsDouble(), JOYSTICK_DEADBAND));
+    double left = leftLimiter.calculate(MathUtil.applyDeadband(getLeftX.getAsDouble(), JOYSTICK_DEADBAND));
+    double rotation = rotationLimiter.calculate(MathUtil.applyDeadband(getRightX.getAsDouble(), JOYSTICK_DEADBAND));
+    drive.setControl(
+        fieldcentricrequest
+            .withVelocityX(forward * MaxSpeed)
+            .withVelocityY(left * MaxSpeed)
+            .withRotationalRate(rotation * MaxAngularRate));
+  }
 
-    @Override
-    public void execute() {
-        /* double putLeftY = ramp(currdriveyinput,getLeftY.getAsDouble(),drive_ramprate);
-        double putLeftX = ramp(currdrivexinput,getLeftX.getAsDouble(),drive_ramprate);
-        double putRightX = ramp(currrotinput,getRightX.getAsDouble(),turn_ramprate);
-        currdriveyinput = putLeftY;
-        currdrivexinput = putLeftX;
-        currrotinput = putRightX;
-        drive.setControl(fieldcentricrequest
-        .withVelocityX(putLeftY * MaxSpeed)
-        .withVelocityY(putLeftX * MaxSpeed)
-        .withRotationalRate(putRightX * MaxAngularRate)); */
-        // Count consecutive scheduler cycles with zero stick input so the ramp
-        // below can snap straight to a full stop instead of slowly decaying.
-        if (getLeftX.getAsDouble() == 0 && getLeftY.getAsDouble() == 0 && getRightX.getAsDouble() == 0) {
-            inputtracker = inputtracker + 1;
-        }
-        else {
-            inputtracker = 0;
-        }
-        if (inputtracker <= 2) {
-            double putLeftY = ramp(currdriveyinput,getLeftY.getAsDouble(),drive_ramprate);
-            double putLeftX = ramp(currdrivexinput,getLeftX.getAsDouble(),drive_ramprate);
-            double putRightX = ramp(currrotinput,getRightX.getAsDouble(),turn_ramprate);
-            currdriveyinput = putLeftY;
-            currdrivexinput = putLeftX;
-            currrotinput = putRightX;
-            drive.setControl(fieldcentricrequest
-                    .withVelocityX(putLeftY * MaxSpeed)
-                    .withVelocityY(putLeftX * MaxSpeed)
-                    .withRotationalRate(putRightX * MaxAngularRate));
-        } else {
-            currdriveyinput = 0;
-            currdrivexinput = 0;
-            currrotinput = 0;
-            drive.setControl(fieldcentricrequest.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
-    }
-
-    /** Moves currentValue toward targetValue by at most rampRate per call. */
-    public static double ramp(double currentValue, double targetValue, double rampRate){
-        if(currentValue < targetValue){
-            currentValue = currentValue + rampRate;
-            if(currentValue > targetValue){
-                currentValue = targetValue;
-            }
-        }
-        if(currentValue > targetValue){
-            currentValue = currentValue - rampRate;
-            if(currentValue < targetValue){
-                currentValue = targetValue;
-            }
-        }
-        return currentValue;
-
-    }
+  @Override
+  public void end(boolean interrupted) {
+    drive.setControl(fieldcentricrequest.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+  }
 }

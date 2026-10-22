@@ -13,7 +13,6 @@ import com.ctre.phoenix6.configs.*;
 //import com.ctre.phoenix6.controls.Follower;
 //import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 //import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -38,7 +37,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private final TalonFX shooterMotorRight, shooterMotorLeft;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
-    private final VoltageOut voltageRequest = new VoltageOut(0);
 
 
     public static Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
@@ -61,11 +59,13 @@ public class ShooterSubsystem extends SubsystemBase {
     private double hub_xposition_red = 11.915521; */
     private double hub_xposition = 0;
 
-    private double statorCurrentLimit = 60; //was 100
-    private double supplyCurrentLimit = 50;
-    private double kp = 0.52;
-    private double ks = 0.24;
-    private double kv = 0.10;
+    private static final double STATOR_CURRENT_LIMIT = 60;
+    private static final double SUPPLY_CURRENT_LIMIT = 50;
+    private static final double KP = 0.52;
+    private static final double KS = 0.24;
+    private static final double KV = 0.10;
+    // VelocityVoltage otherwise steps voltage almost immediately at 0.01 seconds.
+    private static final double CLOSED_LOOP_RAMP_SECONDS = 0.15;
 
 
     public enum ShooterSubsystemStates{
@@ -91,21 +91,22 @@ public class ShooterSubsystem extends SubsystemBase {
          )
          .withVoltage(
              new VoltageConfigs()
+                     .withPeakForwardVoltage(12)
                      .withPeakReverseVoltage(0)
          )
          .withCurrentLimits(
                  new CurrentLimitsConfigs()
-                     .withStatorCurrentLimit(statorCurrentLimit) // was 100
+                     .withStatorCurrentLimit(STATOR_CURRENT_LIMIT)
                      .withStatorCurrentLimitEnable(true)
-                     .withSupplyCurrentLimit(supplyCurrentLimit)
+                     .withSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT)
                      .withSupplyCurrentLimitEnable(true)
          )
          .withSlot0(
                  new Slot0Configs()
-                         .withKP(kp)
-                         .withKS(ks)
-                         .withKV(kv)
-         ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));;
+                         .withKP(KP)
+                         .withKS(KS)
+                         .withKV(KV)
+         ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(CLOSED_LOOP_RAMP_SECONDS));
 
          shooterMotorRight.getConfigurator().apply(shooterRightconfig);
 
@@ -117,21 +118,22 @@ public class ShooterSubsystem extends SubsystemBase {
                 )
                 .withVoltage(
                         new VoltageConfigs()
-                                .withPeakReverseVoltage(0)
+                        .withPeakForwardVoltage(12)
+                        .withPeakReverseVoltage(0)
                 )
                 .withCurrentLimits(
                         new CurrentLimitsConfigs()
-                            .withStatorCurrentLimit(statorCurrentLimit) // was 100
+                            .withStatorCurrentLimit(STATOR_CURRENT_LIMIT)
                             .withStatorCurrentLimitEnable(true)
-                            .withSupplyCurrentLimit(supplyCurrentLimit)
+                            .withSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT)
                             .withSupplyCurrentLimitEnable(true)
                 )
                 .withSlot0(
                         new Slot0Configs()
-                                .withKP(kp)
-                         .withKS(ks)
-                         .withKV(kv)
-                ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));;
+                                .withKP(KP)
+                         .withKS(KS)
+                         .withKV(KV)
+                ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(CLOSED_LOOP_RAMP_SECONDS));
 
         shooterMotorLeft.getConfigurator().apply(shooterLeftconfig);
         // ShooterSubsystemMotor.getDutyCycle().setUpdateFrequency(100);
@@ -185,15 +187,16 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("FollowerShootersubsystem Motor Speed",shooterMotorLeft.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Shooter Motor RPS",shooterMotorRPS);
         SmartDashboard.putNumber("Shooter Error", shooterError());
-    }
-
-    public void init(){
-        final double[][] shooterinterpvalues = new double[][] { {0,0}, {1, 45}, { 2.6, 50}, { 3.29, 52}, {4.6, 55}, {5.1, 60} };  //(distance (meters), shooter rps)
-        for (double[] pair : shooterinterpvalues) {
-            table.put(pair[0], pair[1]);
-        }
-
-        ShooterSubsystemState = ShooterSubsystemStates.SHOOTER_OFF;
+        SmartDashboard.putNumber("Shooter/Right Applied Volts", shooterMotorRight.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Right Supply Current Amps", shooterMotorRight.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Right Stator Current Amps", shooterMotorRight.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Right Temperature C", shooterMotorRight.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Right Fault Bits", shooterMotorRight.getFaultField().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Left Applied Volts", shooterMotorLeft.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Left Supply Current Amps", shooterMotorLeft.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Left Stator Current Amps", shooterMotorLeft.getStatorCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Left Temperature C", shooterMotorLeft.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter/Left Fault Bits", shooterMotorLeft.getFaultField().getValueAsDouble());
     }
 
     private double shooterError(){
