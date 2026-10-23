@@ -12,40 +12,45 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
 //import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.feedersubsystem;
-//import frc.robot.subsystems.feedersubsystem;
+import frc.robot.subsystems.FeederSubsystem;
+//import frc.robot.subsystems.FeederSubsystem;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FeederOnCommand extends Command {
 
 
-  feedersubsystem m_feeder;
-  
+  FeederSubsystem m_feeder;
+
   /** Creates a new shooterOnCommand. */
-  public FeederOnCommand(feedersubsystem param_feeder) {
+  public FeederOnCommand(FeederSubsystem param_feeder) {
     m_feeder = param_feeder;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_feeder);
-    
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_feeder.init();
+    m_feeder.beginFeeding();
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // An inactive HUB still accepts FUEL and can be used intentionally to move
+    // FUEL around the field. Hub activity is displayed to the driver, but this
+    // low-level mechanism command must not block that tactical choice.
     m_feeder.feederOn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_feeder.feederOff();
+  }
 
   // Returns true when the command should end.
   @Override

@@ -11,18 +11,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.hoppersubsystem;
-//import frc.robot.subsystems.hoppersubsystem.hoppersubsystemStates;
+import frc.robot.subsystems.HopperSubsystem;
+//import frc.robot.subsystems.HopperSubsystem.HopperSubsystemStates;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HopperOnCommand extends Command {
 
-  hoppersubsystem m_hopper;
+  HopperSubsystem m_hopper;
 
   double power;
-  
+
   /** Creates a new HopperOnCommand. */
-  public HopperOnCommand(hoppersubsystem param_hopper) {
+  public HopperOnCommand(HopperSubsystem param_hopper) {
     m_hopper = param_hopper;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_hopper);
@@ -40,12 +40,15 @@ public class HopperOnCommand extends Command {
     // if (power > -0.95) {
     //   power =- 0.25;
     // }
-    m_hopper.hopperOn(); //-0.5
+    // An inactive HUB still accepts FUEL and can be used intentionally to move
+    // FUEL around the field. Leave that decision to the driver strategy.
+    m_hopper.hopperOn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.hopperOff();
   }
 
   // Returns true when the command should end.

@@ -11,15 +11,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.hoodsubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HoodReverseCommand extends Command {
 
-  hoodsubsystem m_hood;
+  HoodSubsystem m_hood;
 
   /** Creates a new HoodUpCommand. */
-  public HoodReverseCommand(hoodsubsystem param_hood) {
+  public HoodReverseCommand(HoodSubsystem param_hood) {
     m_hood = param_hood;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_hood);
@@ -37,7 +37,9 @@ public class HoodReverseCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_hood.hoodOff();
+  }
 
   // Returns true when the command should end.
   @Override

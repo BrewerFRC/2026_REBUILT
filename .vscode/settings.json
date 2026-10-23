@@ -1,0 +1,6 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.server.launchMode": "Standard",
+  "java.import.gradle.annotationProcessing.enabled": false,
+  "java.dependency.enableDependencyCheckup": false
+}

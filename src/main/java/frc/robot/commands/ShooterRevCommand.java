@@ -11,19 +11,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.shootersubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterRevCommand extends Command {
 
-  shootersubsystem m_rev;
+  ShooterSubsystem m_rev;
   double RPS;
   /** Creates a new shooterOnCommand. */
-  public ShooterRevCommand(shootersubsystem param_rev) {
+  public ShooterRevCommand(ShooterSubsystem param_rev) {
     m_rev = param_rev;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_rev);
-    
+
   }
 
   // Called when the command is initially scheduled.
@@ -43,7 +43,7 @@ public class ShooterRevCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_rev.ShooterReady();
+    m_rev.ShooterOff();
   }
 
   // Returns true when the command should end.

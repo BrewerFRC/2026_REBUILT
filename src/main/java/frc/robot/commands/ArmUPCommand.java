@@ -5,18 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.armsubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ArmUPCommand extends Command {
-  armsubsystem m_arm;
+  ArmSubsystem m_arm;
 
   //long startTimer;
 
   /** Creates a new ArmUP. */
-  public ArmUPCommand(armsubsystem param_arm) {
+  public ArmUPCommand(ArmSubsystem param_arm) {
     m_arm = param_arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_arm);
@@ -25,19 +25,21 @@ public class ArmUPCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.armsubsystemUP();
+    m_arm.ArmSubsystemUP();
     //startTimer = 0; //Starts timer to determine how long the arm should be moving up
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.armsubsystemUP();
+    m_arm.ArmSubsystemUP();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.ArmSubsystemSTOP();
+  }
 
   // Returns true when the command should end.
   @Override

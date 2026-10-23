@@ -11,16 +11,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.hoppersubsystem;
-//import frc.robot.subsystems.hoppersubsystem.hoppersubsystemStates;
+import frc.robot.subsystems.HopperSubsystem;
+//import frc.robot.subsystems.HopperSubsystem.HopperSubsystemStates;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HopperReverseCommand extends Command {
 
-  hoppersubsystem m_hopper;
-  
+  HopperSubsystem m_hopper;
+
   /** Creates a new HopperOnCommand. */
-  public HopperReverseCommand(hoppersubsystem param_hopper) {
+  public HopperReverseCommand(HopperSubsystem param_hopper) {
     m_hopper = param_hopper;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_hopper);
@@ -40,6 +40,7 @@ public class HopperReverseCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.hopperOff();
   }
 
   // Returns true when the command should end.

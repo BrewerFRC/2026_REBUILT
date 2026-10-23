@@ -12,27 +12,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 //import frc.robot.Constants;
 //import frc.robot.Constants.OperatorConstants;
 //import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.shootersubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterOffCommand extends Command {
 
 
-  shootersubsystem m_shooter;
-  
+  ShooterSubsystem m_shooter;
+
   /** Creates a new shooterOnCommand. */
-  public ShooterOffCommand(shootersubsystem param_shooter) {
+  public ShooterOffCommand(ShooterSubsystem param_shooter) {
     m_shooter = param_shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter);
-    
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.init();
+    m_shooter.ShooterOff();
 
   }
 
