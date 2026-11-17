@@ -190,11 +190,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
                 LimelightHelpers.SetRobotOrientation("limelight-br", headingDeg, 0, 0, 0, 0, 0);
                 var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-br");
-                var llMeasurement2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-br");
-        
-                if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
-                    m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds);
-                } 
+//                var llMeasurement2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-br");
+
+                boolean hasMeasurement = llMeasurement != null;
+                boolean hasTags = hasMeasurement && llMeasurement.tagCount > 0;
+                boolean slowEnough = Math.abs(omegaRps) < 2.0;
+                boolean submitVision = hasTags && slowEnough;
+
+                SmartDashboard.putNumber("LL Tag Count", hasMeasurement ? llMeasurement.tagCount : -1);
+                SmartDashboard.putNumber("Drive Omega (rot/s)", omegaRps);
+                SmartDashboard.putBoolean("Vision Measurement Submitted", submitVision);
+
+                if (hasMeasurement) {
+                    SmartDashboard.putNumber("LL PoseX", llMeasurement.pose.getX());
+                    SmartDashboard.putNumber("LL PoseY", llMeasurement.pose.getY());
+                }
+
+                if (submitVision) {
+                    m_robotContainer.drivetrain.addVisionMeasurement(
+                        llMeasurement.pose, llMeasurement.timestampSeconds);
+                }
+
+
+
+                if (llMeasurement != null) {
+                    SmartDashboard.putNumber("LL PoseX", llMeasurement.pose.getX());
+                    SmartDashboard.putNumber("LL PoseY", llMeasurement.pose.getY());
+
+                    if (llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
+                        m_robotContainer.drivetrain.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds);
+                    }
+                }
             }
            /*  if (true) {
                 var driveState = m_robotContainer.drivetrain.getState();

@@ -249,8 +249,8 @@ public class RobotContainer {
         );
 
         //shooterMotorRPS = 50;
-        // joystick.leftTrigger().whileTrue(new ShooterRevCommand(m_shooter));  //Rev and shoot stuff
-        // joystick.leftTrigger().whileFalse(new ShooterOffCommand(m_shooter));
+        //joystick.leftTrigger().whileTrue(new ShooterRevCommand(m_shooter));  //Rev and shoot stuff
+        //joystick.leftTrigger().whileFalse(new ShooterOffCommand(m_shooter));
         // joystick.rightTrigger().onTrue(new ShootCommand(m_shooter));
 
         // if (m_shooter.ShooterReady() && joystick.rightTrigger().getAsBoolean()){
@@ -323,8 +323,8 @@ public class RobotContainer {
 
         joystick.rightTrigger().whileTrue(shootCollection.ShootCommand());
 
-        joystick.x().whileTrue(ManualAlignedDistDrive);
-        joystick.a().whileTrue(ManualAlignedMove);
+        //joystick.x().whileTrue(ManualAlignedDistDrive);
+        //joystick.a().whileTrue(ManualAlignedMove);
         joystick.b().whileTrue(commandcollection.AimAndShootCommand());
         joystick.b().whileFalse(new HoodReverseCommand(m_hood));
         //joystick.x().debounce(0.2).toggleOnTrue(ManualAlignedMove);

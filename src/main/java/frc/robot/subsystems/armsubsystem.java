@@ -43,7 +43,7 @@ public class armsubsystem extends SubsystemBase {
             .withStatorCurrentLimit(50) // not present before
             .withStatorCurrentLimitEnable(true) //not present before
             .withSupplyCurrentLimit(50) //not present before
-            .withStatorCurrentLimitEnable(true))    //not present before
+            .withSupplyCurrentLimitEnable(true))
         .withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));
 
     armsubsystemMotor.getConfigurator().apply(armMotorConfig);

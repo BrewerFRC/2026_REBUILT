@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 //import com.revrobotics.PersistMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 //import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 //import com.revrobotics.PersistMode;
@@ -39,10 +41,14 @@ public class intakesubsystem extends SubsystemBase {
     public intakesubsystem() {
         intakeSubsystemMotor = new SparkMax(OperatorConstants.intakeMotorID, MotorType.kBrushless);
         SparkMaxConfig config = new SparkMaxConfig();
-        //config.smartCurrentLimit(50);
-        //config.secondaryCurrentLimit(50);
-
-        //intakeSubsystemMotor.configure(config, null, PersistMode.kPersistParameters);
+        // Bound intake current so a jam or simultaneous startup is less likely
+        // to pull voltage away from the drivetrain and shooter.
+        config.smartCurrentLimit(40);
+        intakeSubsystemMotor.configure(
+            config,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters
+        );
 
         //config.inverted(true);
         //intakeSubsystemMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);

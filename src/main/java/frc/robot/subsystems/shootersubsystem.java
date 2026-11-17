@@ -101,7 +101,7 @@ public class shootersubsystem extends SubsystemBase {
                          .withKP(kp)
                          .withKS(ks)
                          .withKV(kv)
-         ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));;
+         ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));
 
          shooterMotorRight.getConfigurator().apply(shooterRightconfig);
 
@@ -127,7 +127,7 @@ public class shootersubsystem extends SubsystemBase {
                                 .withKP(kp)
                          .withKS(ks)
                          .withKV(kv)
-                ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));;
+                ).withClosedLoopRamps(new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(0.01));
 
         shooterMotorLeft.getConfigurator().apply(shooterLeftconfig);
         // shootersubsystemMotor.getDutyCycle().setUpdateFrequency(100);

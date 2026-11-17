@@ -22,8 +22,10 @@ public class teleopdriveCommand extends Command {
     private DoubleSupplier getLeftY;
     private DoubleSupplier getLeftX;
     private DoubleSupplier getRightX;
-    private double drive_ramprate = 0.02;
-    private double turn_ramprate = 0.04;
+    // Ramp joystick commands over roughly 0.4 s to reduce drivetrain current
+    // spikes when accelerating alongside the shooter.
+    private double drive_ramprate = 0.05;
+    private double turn_ramprate = 0.02;
     private double currdrivexinput = 0;
     private double currdriveyinput = 0;
     private double currrotinput = 0;

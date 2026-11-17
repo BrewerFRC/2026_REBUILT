@@ -1,0 +1,22 @@
+{
+  "Connections": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "4564"
+  },
+  "retained": {
+    "SmartDashboard": {
+      "open": true
+    }
+  },
+  "transitory": {
+    "SmartDashboard": {
+      "Drive Omega (rot": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
